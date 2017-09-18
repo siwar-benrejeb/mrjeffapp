@@ -1,0 +1,96 @@
+server:
+  port: 8080
+  max-http-header-size: 128000
+
+spring:
+  application:
+    name: notification-service
+
+  data:
+    rest:
+      basePath: /api
+
+  jackson:
+    serialization.indent_output: true
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.99.100:3306/notification-service
+    username: "root"
+    password: "mrjeff#root"
+
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: validate
+      naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+    properties:
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: true
+
+ 
+
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: siwar.benrejeb@esprit.tn
+    password: siwar1992
+    properties:
+      mail.debug: false
+      mail.transport.protocol: smtp
+      mail.smtp:
+        auth: true
+        starttls.enable: true
+        socketFactory.class: javax.net.ssl.SSLSocketFactory
+        socketFactory.fallback: false
+   
+
+ribbon:
+  ConnectTimeout: 20000
+  ReadTimeout: 60000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+
+mail:
+  defaultReceiver: siwar.benrejeb@esprit.tn
+
+  i18n:
+    default:
+      email: info@mrjeffapp.com
+      phoneNumber: 644446163
+      url:
+        orderUnpaid: https://dev.ecommerce.mrjeffapp.net/confirmar-pedido/
+        orderAuthorizeProducts: https://dev.ecommerce.mrjeffapp.net/autorizar-prendas/
+        orderUnAuthorizeProducts: https://dev.ecommerce.mrjeffapp.net/no-autorizar-prendas/
+        ecommerceLaundry: https://dev.ecommerce.mrjeffapp.net/lavanderia/
+
+    es:
+      email: info@mrjeffapp.com
+      phoneNumber: 644446163
+      url:
+        orderUnpaid: https://dev.ecommerce.mrjeffapp.net/confirmar-pedido/
+        orderAuthorizeProducts: https://dev.ecommerce.mrjeffapp.net/autorizar-prendas/
+        orderUnAuthorizeProducts: https://dev.ecommerce.mrjeffapp.net/no-autorizar-prendas/
+        ecommerceLaundry: https://dev.ecommerce.mrjeffapp.net/lavanderia/
+    mx:
+      email: libertad@mrjeffapp.com
+      phoneNumber: +52 1 55 59898180
+      url:
+        orderUnpaid: https://dev.ecommerce.mrjeffapp.net/confirmar-pedido/
+        orderAuthorizeProducts: https://dev.ecommerce.mrjeffapp.net/autorizar-prendas/
+        orderUnAuthorizeProducts: https://dev.ecommerce.mrjeffapp.net/no-autorizar-prendas/
+        ecommerceLaundry: https://dev.ecommerce.mrjeffapp.net/lavanderia/
+
+
+logging:
+    level:
+      ROOT: INFO
+      BUSINESS_EVENT: DEBUG
+      com.mrjeffapp: DEBUG

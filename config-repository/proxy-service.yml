@@ -1,0 +1,8 @@
+server:
+  port: 9999
+  max-http-header-size: 128000
+
+spring:
+  application:
+    name: proxy-service
+

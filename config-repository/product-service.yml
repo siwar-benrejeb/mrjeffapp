@@ -1,0 +1,56 @@
+server:
+  port: 8084
+  max-http-header-size: 128000
+
+spring:
+  application:
+    name: product-service
+
+  data:
+    rest:
+      basePath: /api
+
+  jackson:
+    serialization.indent_output: true
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.99.100:3306/product-service
+    username: "root"
+    password: "mrjeff#root"
+
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: validate
+      naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+    properties:
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: true
+
+  rabbitmq:
+      host: localhost
+      port: 5672
+      username: product-service
+      password: rabbit#product-service
+      listener:
+        default-requeue-rejected: false
+
+ribbon:
+  ConnectTimeout: 20000
+  ReadTimeout: 60000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+
+logging:
+    level:
+      ROOT: INFO
+      BUSINESS_EVENT: DEBUG
+      com.mrjeffapp: DEBUG
