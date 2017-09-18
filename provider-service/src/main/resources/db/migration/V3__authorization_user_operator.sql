@@ -1,0 +1,1 @@
+Alter table `authorization` ADD user_operator char(36)

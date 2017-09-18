@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<jmxConfigurator/>
+
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+
+	<springProfile name="docker,dev,pre,prod">
+		<appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+			<destination>${LOGSTASH_HOST}</destination>
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+				<customFields>{"service":"${SERVICE_NAME}","environment": "${ENVIRONMENT_NAME}"}</customFields>
+			</encoder>
+			<keepAliveDuration>5 minutes</keepAliveDuration>
+		</appender>
+	</springProfile>
+
+	<root level="INFO">
+		<springProfile name="docker,dev,pre,prod">
+			<appender-ref ref="STASH" />
+		</springProfile>
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>

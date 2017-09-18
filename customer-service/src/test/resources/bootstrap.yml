@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: customer-service
+
+  cloud:
+    config:
+      enabled: false

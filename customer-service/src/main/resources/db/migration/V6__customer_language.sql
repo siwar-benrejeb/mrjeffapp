@@ -1,0 +1,1 @@
+ALTER TABLE customer add language_code varchar(255) not null default 'ES';

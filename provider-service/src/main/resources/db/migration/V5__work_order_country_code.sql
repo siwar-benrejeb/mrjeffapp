@@ -1,0 +1,1 @@
+Alter table `work_order` ADD country varchar(255) NOT NULL default 'ES';
