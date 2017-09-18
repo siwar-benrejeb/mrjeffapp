@@ -1,0 +1,14 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-service
+
+  cloud:
+    config:
+      enabled: true
+      server:
+        git:
+          uri: https://github.com/siwar-benrejeb/mrjeffapp.git
+          search-paths: config-repository
