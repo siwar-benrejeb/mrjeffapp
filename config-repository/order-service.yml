@@ -34,6 +34,11 @@ spring:
       port: 5672
       username: order-service
       password: rabbit#order-service
+      
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://192.168.99.100:8761/eureka/   
 
 
 ribbon:

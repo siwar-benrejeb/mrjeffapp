@@ -20,8 +20,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<docker.image.name>mrjeff/${project.artifactId}</docker.image.name>
-		<java.version>1.8</java.version>
+		<start-class>com.mrjeffapp.order.OrderServiceApp</start-class>
+		<docker.image.prefix>${env.USERNAME}</docker.image.prefix>		<java.version>1.8</java.version>
 		<logstash-logback-encoder.version>4.9</logstash-logback-encoder.version>
 	</properties>
 
@@ -127,7 +127,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -135,39 +134,18 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>build-info</goal>
+							<goal>repackage</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
 				<groupId>com.spotify</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.4.13</version>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.3.4</version>
 				<configuration>
-					<imageName>${docker.image.name}</imageName>
-					<dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
-					<forceTags>true</forceTags>
-					<imageTags>
-						<imageTag>latest</imageTag>
-					</imageTags>
-					<resources>
-						<resource>
-							<targetPath>/</targetPath>
-							<directory>${project.build.directory}</directory>
-							<include>${project.build.finalName}.jar</include>
-						</resource>
-					</resources>
+					<repository>${docker.image.prefix}/${project.artifactId}</repository>
 				</configuration>
-				<executions>
-					<execution>
-						<id>build-image</id>
-						<phase>package</phase>
-						<goals>
-							<goal>build</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
