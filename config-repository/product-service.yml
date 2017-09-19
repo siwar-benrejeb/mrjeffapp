@@ -36,6 +36,11 @@ spring:
       password: rabbit#product-service
       listener:
         default-requeue-rejected: false
+        
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://192.168.99.100:8761/eureka/          
 
 ribbon:
   ConnectTimeout: 20000

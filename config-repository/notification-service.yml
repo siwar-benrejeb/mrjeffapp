@@ -88,6 +88,10 @@ mail:
         orderUnAuthorizeProducts: https://dev.ecommerce.mrjeffapp.net/no-autorizar-prendas/
         ecommerceLaundry: https://dev.ecommerce.mrjeffapp.net/lavanderia/
 
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://192.168.99.100:8761/eureka/  
 
 logging:
     level:
