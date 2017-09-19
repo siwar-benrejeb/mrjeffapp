@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  
+  configservice:
+    build: ./config-service
+    volumes:
+     - ./config-service:/app
+    ports:
+      - "8888:8888"
+    expose:
+     - "8888"
+
+  eurekaservice:
+    build: ./eureka-service
+    volumes:
+     - ./eureka-service:/app
+    ports:
+      - "8761:8761"
+    expose:
+     - "8761"
+
+  customerservice:
+    build: ./customer-service
+    volumes:
+     - ./customer-service:/app
+    depends_on:
+     - configservice
+     - eurekaservice
+    restart: always
+    ports:
+      - "8083:8083"
+    expose:
+     - "8083"
+
+  notificationservice:
+    build: ./notification-service
+    volumes:
+     - ./notification-service:/app
+    depends_on:
+     - configservice
+     - eurekaservice
+    restart: always
+    ports:
+      - "8080:8080"
+    expose:
+     - "8080"
