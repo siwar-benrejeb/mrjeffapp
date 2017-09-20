@@ -1,0 +1,35 @@
+eureka:
+  client:
+    enabled: false
+
+flyway:
+    enabled: false
+
+spring:
+  profiles:
+    active: test
+
+  data:
+    rest:
+      basePath: /api
+
+  datasource:
+    initialize: true
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=- 1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    platform: h2
+
+  jpa:
+    database: H2
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+    properties:
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+
+logging:
+  level:
+    ROOT: INFO

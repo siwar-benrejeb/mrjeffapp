@@ -35,7 +35,8 @@ public class LoginServiceImpl implements LoginService {
         Optional<Customer> userOptional = customerRepository.findByEmailAndEnabledTrue(username);
 
         if(!userOptional.isPresent()) {
-            throw new AuthenticationException("Invalid customer credentials");
+            return null;
+//            throw new AuthenticationException("Invalid customer credentials");
         }
 
         Customer customer = userOptional.get();
@@ -44,10 +45,8 @@ public class LoginServiceImpl implements LoginService {
         boolean matchBackendPassword = encoder.matches(password, customer.getPassword());
 
         if(!matchBackendPassword) {
-
-
-
-            throw new AuthenticationException("Invalid customer credentials");
+            return null;
+//            throw new AuthenticationException("Invalid customer credentials");
         }else
 
         return customer;

@@ -27,7 +27,7 @@ services:
     depends_on:
      - configservice
      - eurekaservice
-    restart: always
+    restart: unless-stopped
     ports:
       - "8083:8083"
     expose:
@@ -40,8 +40,33 @@ services:
     depends_on:
      - configservice
      - eurekaservice
-    restart: always
+    restart: unless-stopped
     ports:
       - "8080:8080"
     expose:
      - "8080"
+     
+  orderservice:
+    build: ./order-service
+    volumes:
+     - ./order-service:/app
+    depends_on:
+     - configservice
+     - eurekaservice
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    expose:
+     - "8081"
+  productservice:
+    build: ./product-service
+    volumes:
+     - ./product-service:/app
+    depends_on:
+     - configservice
+     - eurekaservice
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    expose:
+     - "8084"     
