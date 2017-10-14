@@ -8,16 +8,9 @@ node {
         }
 
         stage('Build') {
-	  dir ('config-service') {
-
-            sh 'mvn clean package'
-
-            def pom = readMavenPom file:'pom.xml'
-
-            print pom.version
-
-            env.version = pom.version
-	  }
+	  stage('build') {
+              sh './mvnw package'
+          }
         }
 
         stage('Image') {
