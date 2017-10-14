@@ -10,7 +10,7 @@ public class AddressCreatedEvent {
     private String address;
 
     private String addressNumber;
-    
+
 
     private String addressDetails;
 
