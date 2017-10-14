@@ -37,7 +37,7 @@ node {
         }
          stage ('Final') {
 
-                    build job: 'cureka-service-Pipeline', wait: false
+                    build job: 'customer-service-Pipeline', wait: false
 
                 }
 

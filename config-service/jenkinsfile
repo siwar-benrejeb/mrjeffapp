@@ -22,7 +22,7 @@ node {
 
         stage('Image') {
 
-            dir ('customer-service') {
+            dir ('config-service') {
 
 	      docker.build "mrjeffapp_configservice"
 
