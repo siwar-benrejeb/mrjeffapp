@@ -1,0 +1,45 @@
+node {
+
+
+        stage('Checkout') {
+
+            git url: 'https://github.com/siwar-benrejeb/mrjeffapp.git', credentialsId:  'git-credit-ID', branch: 'master'
+
+        }
+
+        stage('Build') {
+	  dir ('eureka-service') {
+
+            sh 'mvn clean package'
+
+            def pom = readMavenPom file:'pom.xml'
+
+            print pom.version
+
+            env.version = pom.version
+	  }
+        }
+
+        stage('Image') {
+
+            dir ('eureka-service') {
+
+	      docker.build "mrjeffapp_eurekaservice"
+
+            }
+
+        }
+
+        stage ('Run') {
+
+            docker.image("mrjeffapp_eurekaservice").run('-p 8761:8761 --net=host --expose=8761 -t mrjeffapp_eurekaservice:latest')
+
+        }
+         stage ('Final') {
+
+                    build job: 'cureka-service-Pipeline', wait: false
+
+                }
+
+
+}

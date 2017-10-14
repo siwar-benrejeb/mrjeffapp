@@ -1,0 +1,45 @@
+node {
+
+
+        stage('Checkout') {
+
+            git url: 'https://github.com/siwar-benrejeb/mrjeffapp.git', credentialsId:  'git-credit-ID', branch: 'master'
+
+        }
+
+        stage('Build') {
+	  dir ('product-service') {
+
+            sh 'mvn clean package'
+
+            def pom = readMavenPom file:'pom.xml'
+
+            print pom.version
+
+            env.version = pom.version
+	  }
+        }
+
+        stage('Image') {
+
+            dir ('product-service') {
+
+	      docker.build "mrjeffapp_productservice"
+
+            }
+
+        }
+
+        stage ('Run') {
+
+            docker.image("mrjeffapp_productservice").run('-p 8084:8084 --net=host --expose=8084 -t mrjeffapp_productservice:latest')
+
+        }
+         stage ('Final') {
+
+                    build job: 'notification-service-Pipeline', wait: false
+
+                }
+
+
+}
