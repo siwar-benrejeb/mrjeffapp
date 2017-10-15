@@ -16,7 +16,7 @@ public class AddressCreatedEvent {
     private String customerId;
 
 
-    
+
     private String postalCode;
 
     private String postalCodeId;

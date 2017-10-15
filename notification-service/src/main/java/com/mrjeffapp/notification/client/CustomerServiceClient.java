@@ -13,6 +13,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public interface CustomerServiceClient {
 
     @RequestMapping(method = GET, value = "/api/customers/{id}")
-    Resource<Customer> findCustomerById(@PathVariable("id") String customerId, @RequestParam("projection") String projection);
+    Resource<Customer>  findCustomerById(@PathVariable("id") String customerId, @RequestParam("projection") String projection);
 
 }
