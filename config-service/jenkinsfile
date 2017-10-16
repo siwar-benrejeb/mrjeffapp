@@ -9,7 +9,7 @@ node {
 
         stage('Build') {
 
-              sh './mvnw package'
+              sh 'mvn clean package'
         }
 
         stage('Image') {
