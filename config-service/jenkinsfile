@@ -19,7 +19,7 @@ node {
         }
 
         stage('Image') {
-
+			checkout scm
             dir ('config-service') {
 
 				def dock = tool 'docker'
