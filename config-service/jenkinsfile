@@ -12,7 +12,9 @@ node {
 
         stage('Build') {
 
-              sh 'mvn clean package'
+			def mvnHome = tool 'M3'
+			env.PATH = "${mvnHome}/bin:${env.PATH}"
+            sh 'mvn -B clean package'
         }
 
         stage('Image') {
