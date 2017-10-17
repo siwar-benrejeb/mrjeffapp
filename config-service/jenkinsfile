@@ -12,7 +12,7 @@ node {
 
         stage('Build') {
 
-			def mvnHome = tool 'M3'
+			def mvnHome = tool 'maven 3.5.0'
 			env.PATH = "${mvnHome}/bin:${env.PATH}"
             sh 'mvn -B clean package'
         }
