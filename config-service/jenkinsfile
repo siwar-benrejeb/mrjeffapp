@@ -20,9 +20,13 @@ node {
 
         stage('Image') {
 
-           checkout scm
-    def customImage = docker.build("my-image:${env.BUILD_ID}")
-    customImage.push()
+            dir ('config-service') {
+
+				def dock = tool 'docker'
+				env.PATH = "${dock}/bin:${env.PATH}"
+				sh docker.build "mrjeffapp_configservice"
+
+            }
 
         }
 
