@@ -1,48 +1,28 @@
 pipeline {
-agent any
-    tools { 
-        maven 'Maven 3.5.0' 
-        jdk 'jdk8' 
+    agent any
+    tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
     }
-	stages {
+    stages {
         stage ('Initialize') {
-                            sh '''
+            steps {
+                sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                ''' 
-        }
-
-        stage('Checkout') {
-
-            git url: 'https://github.com/siwar-benrejeb/mrjeffapp.git', credentialsId:  'git-credit-ID', branch: 'master'
-
-        }
-
-        stage('Build') {
-
-              sh 'mvn clean package'
-        }
-
-        stage('Image') {
-
-            dir ('config-service') {
-
-	      docker.build "mrjeffapp_configservice"
-
+                '''
             }
-
         }
 
-        stage ('Run') {
-
-            docker.image("mrjeffapp_configservice").run('-p 8083:8083 --net=host --expose=8080 -t mrjeffapp_configservice:latest')
-
-        }
-         stage ('Final') {
-
-                    build job: 'eureka-service-Pipeline', wait: false
-
+        stage ('Build') {
+            steps {
+                sh 'mvn -Dmaven.test.failure.ignore=true install' 
+            }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml' 
                 }
-}
-
+            }
+        }
+    }
 }
