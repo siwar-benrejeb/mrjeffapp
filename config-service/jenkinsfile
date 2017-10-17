@@ -1,8 +1,6 @@
 node {
 
-		stage('tools'){
-			maven 'maven 3.5.0'
-		}
+		agent { docker 'maven:3-alpine' }
 
         stage('Checkout') {
 
