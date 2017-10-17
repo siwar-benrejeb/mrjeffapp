@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     tools {
         maven 'maven 3.5.0'
     }
@@ -29,7 +30,7 @@ pipeline {
 		stage ('Image') {
             steps {
 				dir ('config-service') {
-				agent { dockerfile true }
+					agent { dockerfile true }
 					sh 'docker build -t mrjeffapp_configservice' 
 				}
             }
