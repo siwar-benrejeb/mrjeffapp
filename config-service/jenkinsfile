@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         maven 'maven 3.5.0'
-        jdk 'jdk 9'
+        jdk 'jdk 8'
     }
     stages {
         stage ('Initialize') {
@@ -14,15 +14,30 @@ pipeline {
             }
         }
 
+		stage('Checkout') {
+			steps {
+				git url: 'https://github.com/siwar-benrejeb/mrjeffapp.git', credentialsId:  'git-credit-ID', branch: 'master'
+			}
+        }
         stage ('Build') {
             steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install' 
+                sh 'mvn clean package' 
             }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
-                }
+            
+        }
+		stage ('Build') {
+            steps {
+                dir ('config-service') {
+					docker.build "mrjeffapp_configservice"
+				}
             }
+            
+        }
+		stage ('Build') {
+            steps {
+                docker.image("mrjeffapp_configservice").run('-p 8083:8083 --net=host --expose=8080 -t mrjeffapp_configservice:latest')
+            }
+            
         }
     }
 }
