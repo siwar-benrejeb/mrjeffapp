@@ -4,6 +4,7 @@ agent any
         maven 'Maven 3.5.0' 
         jdk 'jdk8' 
     }
+	stages {
         stage ('Initialize') {
                             sh '''
                     echo "PATH = ${PATH}"
@@ -42,6 +43,6 @@ agent any
                     build job: 'eureka-service-Pipeline', wait: false
 
                 }
-
+}
 
 }
