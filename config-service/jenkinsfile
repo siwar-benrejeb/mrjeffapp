@@ -27,10 +27,7 @@ node {
 				
 
         sh "docker tag $DOCKER_IMAGE:latest $DOCKER_REMOTE_IMAGE:latest"
-        sh "docker tag $DOCKER_IMAGE:latest $DOCKER_REMOTE_IMAGE:$commit"
-
         sh "docker push $DOCKER_REMOTE_IMAGE:latest"
-        sh "docker push $DOCKER_REMOTE_IMAGE:$commit"
 
             }
 
