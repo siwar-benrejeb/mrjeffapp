@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         maven 'maven 3.5.0'
-        jdk 'jdk 8'
+        jdk 'jdk 9'
     }
     stages {
         stage ('Initialize') {
@@ -25,7 +25,7 @@ pipeline {
             }
             
         }
-		stage ('Build') {
+		stage ('Image') {
             steps {
                 dir ('config-service') {
 					docker.build 'mrjeffapp_configservice'
@@ -33,9 +33,9 @@ pipeline {
             }
             
         }
-		stage ('Build') {
+		stage ('Run') {
             steps {
-                docker.image("mrjeffapp_configservice").run('-p 8083:8083 --net=host --expose=8080 -t mrjeffapp_configservice:latest')
+                docker.image('mrjeffapp_configservice').run('-p 8083:8083 --net=host --expose=8080 -t mrjeffapp_configservice:latest')
             }
             
         }
