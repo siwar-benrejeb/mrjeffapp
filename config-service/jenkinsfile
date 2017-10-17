@@ -1,4 +1,4 @@
-node('windows') {
+node {
 
 		environment {
 			maven 'maven 3.5.0'
