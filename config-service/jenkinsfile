@@ -20,7 +20,11 @@ node {
 
         stage('Image') {
 
-				def commit = getCommit();
+            dir ('config-service') {
+
+				def dock = tool 'docker'
+				env.PATH = "${dock}/bin:${env.PATH}"
+				
 
         sh "docker tag $DOCKER_IMAGE:latest $DOCKER_REMOTE_IMAGE:latest"
         sh "docker tag $DOCKER_IMAGE:latest $DOCKER_REMOTE_IMAGE:$commit"
@@ -28,7 +32,7 @@ node {
         sh "docker push $DOCKER_REMOTE_IMAGE:latest"
         sh "docker push $DOCKER_REMOTE_IMAGE:$commit"
 
-            
+            }
 
         }
 
