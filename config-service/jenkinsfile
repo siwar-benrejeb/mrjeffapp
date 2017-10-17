@@ -1,38 +1,28 @@
-node {
-
-		agent { docker 'maven:3-alpine' }
-
-        stage('Checkout') {
-
-            git url: 'https://github.com/siwar-benrejeb/mrjeffapp.git', credentialsId:  'git-credit-ID', branch: 'master'
-
-        }
-
-        stage('Build') {
-
-              sh 'mvn clean package'
-        }
-
-        stage('Image') {
-
-            dir ('config-service') {
-
-	      docker.build "mrjeffapp_configservice"
-
+pipeline {
+    agent any
+    tools {
+        maven 'maven 3.5.0'
+    }
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                '''
             }
-
         }
 
-        stage ('Run') {
-
-            docker.image("mrjeffapp_configservice").run('-p 8083:8083 --net=host --expose=8080 -t mrjeffapp_configservice:latest')
-
+        stage ('Checkout') {
+            steps {
+                git url: 'https://github.com/siwar-benrejeb/mrjeffapp.git', credentialsId:  'git-credit-ID', branch: 'master'
+            }
         }
-         stage ('Final') {
-
-                    build job: 'eureka-service-Pipeline', wait: false
-
-                }
-
-
+		
+		stage ('Build') {
+            steps {
+                sh 'mvn -Dmaven.test.failure.ignore=true clean package' 
+            }
+        }
+    }
 }
