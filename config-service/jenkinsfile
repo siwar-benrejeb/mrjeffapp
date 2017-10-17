@@ -11,10 +11,11 @@ node {
         }
 
         stage('Build') {
-
+		dir ('config-service') {	
 			def mvnHome = tool 'maven 3.5.0'
 			env.PATH = "${mvnHome}/bin:${env.PATH}"
             sh 'mvn clean package'
+		}
         }
 
         stage('Image') {
