@@ -1,4 +1,4 @@
-node {
+node('windows') {
 
 		environment {
 			maven 'maven 3.5.0'
@@ -24,10 +24,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				
-
-        sh "docker tag $DOCKER_IMAGE:latest $DOCKER_REMOTE_IMAGE:latest"
-        sh "docker push $DOCKER_REMOTE_IMAGE:latest"
+				docker.build "mrjeffapp_configservice"
 
             }
 
