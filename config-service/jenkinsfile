@@ -26,5 +26,13 @@ pipeline {
 				}
             }
         }
+		
+		stage ('Image') {
+            steps {
+				dir ('config-service') {
+					sh 'docker build -t mrjeffapp_configservice' 
+				}
+            }
+        }
     }
 }
