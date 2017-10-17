@@ -30,7 +30,7 @@ pipeline {
 		stage ('Image') {
             steps {
 				dir ('config-service') {
-					docker.build('mrjeffapp_configservice')
+					docker.build 'mrjeffapp_configservice'
 				}
             }
         }
