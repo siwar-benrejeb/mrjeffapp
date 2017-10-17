@@ -1,4 +1,4 @@
-node('windows') {
+node {
 
 		environment {
 			maven 'maven 3.5.0'
@@ -24,7 +24,7 @@ node('windows') {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				bat 'CACLS /var/run/docker.sock /e /p siwsiw:F '
+				sh 'chmod -R 777 /var/run/docker.sock'
 				docker.build "mrjeffapp_configservice"
 
             }
