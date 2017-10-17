@@ -21,7 +21,9 @@ pipeline {
 		
 		stage ('Build') {
             steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true clean package' 
+				dir ('config-service') {
+					sh 'mvn -Dmaven.test.failure.ignore=true clean package' 
+				}
             }
         }
     }
