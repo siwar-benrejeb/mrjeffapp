@@ -24,7 +24,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "c:/program files/docker toolbox:${env.PATH}"
-				sh 'docker build -t mrjeffapp_configservice .'
+				sh 'docker build -f Dockerfile -t mrjeffapp_configservice .'
             }
 
         }
