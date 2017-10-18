@@ -24,7 +24,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-                def app = docker.build "artirix/our-app:${env.BUILD_NUMBER}"
+				docker.build "mrjeffapp_configservice"
 
             }
 
