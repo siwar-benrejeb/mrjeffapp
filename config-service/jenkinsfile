@@ -24,7 +24,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				docker.build "mrjeffapp_configservice"
+				sh 'docker build -v /var/run/docker.sock:/var/run/docker.sock -t mrjeffapp_configservice .'
 
             }
 
