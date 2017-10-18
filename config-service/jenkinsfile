@@ -24,7 +24,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				docker.build('mrjeffapp_configservice').inside("--volume=/var/run/docker.sock:/var/run/docker.sock") {}
+				sh 'docker run --net=host -v /var/run/docker.sock:/var/run/docker.sock --privileged -t mrjeffapp_configservice'
             }
 
         }
