@@ -24,8 +24,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				sh 'bash -c "chmod -R 777 /var/run/docker.sock"'
-				sh 'docker run -t -v /var/run/docker.sock:/var/run/docker.sock mrjeffapp_configservice'
+				sh 'docker run --net=host -v /var/run/docker.sock:/var/run/docker.sock -t mrjeffapp_configservice'
             }
 
         }
