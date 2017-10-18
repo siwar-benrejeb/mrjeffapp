@@ -23,7 +23,7 @@ node {
             dir ('config-service') {
 
 				def dock = tool 'docker'
-				env.PATH = "c:\program files\docker toolbox:${env.PATH}"
+				env.PATH = "c:/program files/docker toolbox:${env.PATH}"
 				sh 'docker build -t mrjeffapp_configservice .'
             }
 
