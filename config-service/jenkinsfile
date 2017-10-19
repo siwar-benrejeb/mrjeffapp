@@ -35,7 +35,7 @@ node {
 			 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-            'docker.image("mrjeffapp_configservice").run('-p 8888:8888 --net=host --expose=8888 -t mrjeffapp_configservice:latest')'
+            docker.image("mrjeffapp_configservice").run('-p 8888:8888 --net=host --expose=8888 -t mrjeffapp_configservice:latest')
 			}
 
         }
