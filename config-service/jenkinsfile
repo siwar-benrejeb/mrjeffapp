@@ -24,7 +24,6 @@ node {
 
         stage('Image') {
 
-           def commit = getCommit();
 
         sh "docker tag $DOCKER_IMAGE:latest $DOCKER_REMOTE_IMAGE:latest"
 
