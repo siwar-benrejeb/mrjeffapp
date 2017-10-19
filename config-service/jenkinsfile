@@ -25,7 +25,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-			sh 'docker run -v  /mnt/sda1/var/lib/docker: /mnt/sda1/var/lib/docker -p 8888:8888 -t mrjeffapp_configservice'
+			sh 'docker run -v  /mnt/sda1/var/lib/docker:/mnt/sda1/var/lib/docker -p 8888:8888 -t mrjeffapp_configservice'
             }
 
         }
