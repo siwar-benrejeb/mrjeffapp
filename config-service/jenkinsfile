@@ -2,6 +2,7 @@ node {
 
 		environment {
 			maven 'maven 3.5.0'
+			docker 'docker'
 		}
 
         stage('Checkout') {
