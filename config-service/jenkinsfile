@@ -25,7 +25,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				docker build -t Dockerfile .
+				sh 'docker build -t Dockerfile .'
             }
 
         }
