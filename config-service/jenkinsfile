@@ -24,7 +24,7 @@ node {
 
 				def dock = tool 'docker-toolbox'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				docker-toolbox.build 'mrjeffapp_configservice'
+				sh 'docker-toolbox run -v /var/jenkins_home/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/docker/bin/docker:/var/jenkins_home/tools/org.jenkinsci.plugins.docker.commons.tools.DockerTool/docker/bin/docker -p 8083:8083 -t mrjeffapp_configservice'
 
             }
 
