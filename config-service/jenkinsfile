@@ -1,3 +1,4 @@
+final ARTIFACT = "config-service"
 final DOCKER_IMAGE = "mrjeff/$ARTIFACT";
 def getCommit() {
     return readFile('commit').trim();
