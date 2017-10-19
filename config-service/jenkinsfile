@@ -1,6 +1,3 @@
-final ARTIFACT = "config-service"
-final DOCKER_IMAGE = "mrjeff/$ARTIFACT";
-
 node {
 
 		environment {
@@ -24,10 +21,12 @@ node {
 
         stage('Image') {
 
+            dir ('config-service') {
 
-        sh "docker tag $DOCKER_IMAGE:latest $DOCKER_REMOTE_IMAGE:latest"
-
-     
+				def dock = tool 'docker'
+				env.PATH = "${dock}/bin:${env.PATH}"
+			sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock -p 8888:8888 -t mrjeffapp_configservice'
+            }
 
         }
 
