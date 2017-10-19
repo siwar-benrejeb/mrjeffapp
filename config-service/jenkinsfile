@@ -2,7 +2,7 @@ node {
 
 		environment {
 			maven 'maven 3.5.0'
-			docker 'docker'
+			
 		}
 
         stage('Checkout') {
@@ -25,9 +25,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-			sh 'docker run  --volumes-from=jenkins-data -w /var/jenkins_home/workspace/config-service-Pipeline
-'
-			
+			sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock -p 8888:8888 -t mrjeffapp_configservice'
             }
 
         }
