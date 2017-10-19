@@ -22,9 +22,10 @@ node {
 
             dir ('config-service') {
 
-				def dock = tool 'docker'
+				def dock = tool 'docker-toolbox'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				sh 'docker run -t -v /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin mrjeffapp_configservice'
+				sh 'docker-toolbox.build 'mrjeffapp_configservice'
+
             }
 
         }
