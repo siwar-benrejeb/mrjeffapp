@@ -25,7 +25,9 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-sh 'docker run -t -u 8888:8888 --volumes-from=jenkins-data -w /var/jenkins_home/workspace/config-service-Pipeline'			
+			sh 'docker run  --volumes-from=jenkins-data -w /var/jenkins_home/workspace/config-service-Pipeline
+'
+			
             }
 
         }
