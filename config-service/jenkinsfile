@@ -25,7 +25,7 @@ node {
 
 				def dock = tool 'docker'
 				env.PATH = "${dock}/bin:${env.PATH}"
-				 docker.build('docker -f Dockerfile')
+				 docker.build 	-v npipe:////./ppe/docker_engine:npipe:////./ppe/docker_engine
 				 }
             
 
