@@ -19,6 +19,13 @@ node {
 		}
         }
 
+	
+	stage('Initialisation') {
+
+            sh 'docker stop $(docker ps -a -q)'
+	    sh 'docker rm $(docker ps -a -q)'
+        }
+
         stage('Image') {
 
             dir ('config-service') {
