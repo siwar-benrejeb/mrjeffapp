@@ -9,11 +9,15 @@ node {
 
       
  	stage('unit test') {
+ 	dir ('customer-service'){
         sh 'mvn test'
+	}
    	 }
 
    	 stage('integration test') {
+		dir ('customer-service'){
         sh 'mvn failsafe:integration-test failsafe:verify'
+	}
    	 }
 
         stage('Build') {
