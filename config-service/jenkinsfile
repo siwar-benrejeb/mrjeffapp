@@ -11,11 +11,18 @@ node {
 
         }
 
+ 	stage('unit test') {
+        sh './mvnw test'
+   	 }
+
+   	 stage('integration test') {
+        sh './mvnw failsafe:integration-test failsafe:verify'
+   	 }
+
         stage('Build') {
 		dir ('config-service') {	
-			def mvnHome = tool 'maven 3.5.0'
-			env.PATH = "${mvnHome}/bin:${env.PATH}"
-            sh 'mvn clean package'
+			
+            	sh 'mvn clean package'
 		}
         }
 

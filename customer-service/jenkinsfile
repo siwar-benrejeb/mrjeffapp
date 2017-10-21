@@ -7,17 +7,20 @@ node {
 
         }
 
+      
+ 	stage('unit test') {
+        sh './mvnw test'
+   	 }
+
+   	 stage('integration test') {
+        sh './mvnw failsafe:integration-test failsafe:verify'
+   	 }
+
         stage('Build') {
-	  dir ('customer-service') {
-
-            sh 'mvn clean package'
-
-            def pom = readMavenPom file:'pom.xml'
-
-            print pom.version
-
-            env.version = pom.version
-	  }
+		dir ('config-service') {	
+			
+            	sh 'mvn clean package'
+		}
         }
 
         stage('Image') {

@@ -7,11 +7,20 @@ node {
 
         }
 
-        stage('Build') {
-	  dir ('eureka-service') {
+    
+ 	stage('unit test') {
+        sh './mvnw test'
+   	 }
 
-            sh 'mvn clean package'
-	  }
+   	 stage('integration test') {
+        sh './mvnw failsafe:integration-test failsafe:verify'
+   	 }
+
+        stage('Build') {
+		dir ('config-service') {	
+			
+            	sh 'mvn clean package'
+		}
         }
 
         stage('Image') {
