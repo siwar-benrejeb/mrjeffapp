@@ -9,15 +9,19 @@ node {
 
     
  	stage('unit test') {
-        sh './mvnw test'
+	dir ('order-service'){
+        sh 'mvn test'
    	 }
+	}
 
    	 stage('integration test') {
-        sh './mvnw failsafe:integration-test failsafe:verify'
+	dir ('order-service'){
+        sh 'mvn failsafe:integration-test failsafe:verify'
+	}
    	 }
 
         stage('Build') {
-		dir ('config-service') {	
+		dir ('order-service') {	
 			
             	sh 'mvn clean package'
 		}
