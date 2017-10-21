@@ -9,11 +9,11 @@ node {
 
       
  	stage('unit test') {
-        sh 'mvnw test'
+        sh 'mvn test'
    	 }
 
    	 stage('integration test') {
-        sh 'mvnw failsafe:integration-test failsafe:verify'
+        sh 'mvn failsafe:integration-test failsafe:verify'
    	 }
 
         stage('Build') {
