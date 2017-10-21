@@ -8,13 +8,6 @@ node {
         }
 
     
- 	stage('unit test') {
-        sh './mvnw test'
-   	 }
-
-   	 stage('integration test') {
-        sh './mvnw failsafe:integration-test failsafe:verify'
-   	 }
 
         stage('Build') {
 		dir ('config-service') {	
