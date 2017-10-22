@@ -17,6 +17,7 @@ node {
    	 stage('integration test') {
 		dir ('notification-service') {
         sh 'mvn failsafe:integration-test failsafe:verify'
+
         }
    	 }
 
