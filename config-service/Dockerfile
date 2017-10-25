@@ -4,6 +4,7 @@ ENV JAVA_OPTS=""
 
 ADD target/config-service-0.0.1-SNAPSHOT.jar config-service.jar
 
+
 RUN sh -c 'touch /config-service.jar'
 
 EXPOSE 8888
