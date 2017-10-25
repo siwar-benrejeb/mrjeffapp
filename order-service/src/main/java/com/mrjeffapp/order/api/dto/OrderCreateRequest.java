@@ -13,7 +13,6 @@ public class OrderCreateRequest {
     @NotNull
     private String customerId;
 
-    @NotNull
     private String channelCode;
 
     private String couponCode;
@@ -26,18 +25,14 @@ public class OrderCreateRequest {
     @Valid
     private Set<OrderCreateVisitRequest> visits;
 
-    @NotNull
     @Pattern(regexp = "B2B|B2C")
     private String orderTypeCode;
 
-    @NotNull
     @Pattern(regexp = "B2B|B2C")
     private String timetableTypeCode;
 
-    @NotNull
     private String paymentMethodCode;
 
-    @NotNull
     private String billingAddressId;
 
     private String note;

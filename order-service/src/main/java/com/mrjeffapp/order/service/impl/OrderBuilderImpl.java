@@ -3,7 +3,6 @@ package com.mrjeffapp.order.service.impl;
 import com.mrjeffapp.order.api.dto.OrderCreateProductRequest;
 import com.mrjeffapp.order.api.dto.OrderCreateRequest;
 import com.mrjeffapp.order.api.dto.OrderCreateVisitRequest;
-import com.mrjeffapp.order.client.administrative.AdministrativeClient;
 import com.mrjeffapp.order.client.administrative.model.TimeTableAvailableResponse;
 import com.mrjeffapp.order.client.customer.CustomerClient;
 import com.mrjeffapp.order.client.customer.model.Address;
@@ -51,17 +50,15 @@ public class OrderBuilderImpl implements OrderBuilder {
 
     private final CustomerClient customerClient;
 
-    private final AdministrativeClient administrativeClient;
 
     @Autowired
-    public OrderBuilderImpl(HeadquarterAssignmentConfigurationRepository headquarterAssignmentConfigurationRepository, OrderStatusRepository orderStatusRepository, ChannelRepository channelRepository, OrderTypeRepository orderTypeRepository, ProductClient productClient, CustomerClient customerClient, AdministrativeClient administrativeClient) {
+    public OrderBuilderImpl(HeadquarterAssignmentConfigurationRepository headquarterAssignmentConfigurationRepository, OrderStatusRepository orderStatusRepository, ChannelRepository channelRepository, OrderTypeRepository orderTypeRepository, ProductClient productClient, CustomerClient customerClient) {
         this.headquarterAssignmentConfigurationRepository = headquarterAssignmentConfigurationRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.channelRepository = channelRepository;
         this.orderTypeRepository = orderTypeRepository;
         this.productClient = productClient;
         this.customerClient = customerClient;
-        this.administrativeClient = administrativeClient;
     }
 
     @Override
@@ -81,9 +78,9 @@ public class OrderBuilderImpl implements OrderBuilder {
 
         order.setPaymentMethodCode(orderRequest.getPaymentMethodCode());
 
-        LOG.debug("Assigning order status");
-        OrderStatus orderStatusCreated = orderStatusRepository.findByCodeAndActiveTrue(ORDER_STATUS_CREATED).get();
-        order.setOrderStatus(orderStatusCreated);
+//        LOG.debug("Assigning order status");
+//        OrderStatus orderStatusCreated = orderStatusRepository.findByCodeAndActiveTrue(ORDER_STATUS_CREATED).get();
+//        order.setOrderStatus(orderStatusCreated);
 
         LOG.debug("Assigning visits");
         setOrderLocationAndVisits(orderRequest, order);
@@ -91,8 +88,8 @@ public class OrderBuilderImpl implements OrderBuilder {
         LOG.debug("Assigning headquarter id");
         setHeadquarterByPostalCode(orderRequest, order);
 
-        LOG.debug("Assigning order type with value: {}", orderRequest.getOrderTypeCode());
-        setOrderType(orderRequest, order);
+//        LOG.debug("Assigning order type with value: {}", orderRequest.getOrderTypeCode());
+//        setOrderType(orderRequest, order);
 
         LOG.debug("Assigning channel");
         setChannel(orderRequest, order);
@@ -157,9 +154,9 @@ public class OrderBuilderImpl implements OrderBuilder {
                                     .collect(joining(ITEM_DELIMITER));
         LOG.debug("Product codes: {}", productCodes);
 
-        Resources<Product> productResources = productClient.findByCodeInAndActiveTrue(productCodes);
+        Resources<Product> productResources = productClient.findProductsByIdInProducts(productCodes);
 
-        checkProducts(orderRequest, productResources);
+      checkProducts(orderRequest, productResources);
 
         Collection<Product> productsCodesUppercase = productResources.getContent();
         for(Product product : productsCodesUppercase) {
@@ -232,9 +229,9 @@ public class OrderBuilderImpl implements OrderBuilder {
 
         String visitPickupCity = visitPickup.getCityId();
         String visitDeliveryCity = visitDelivery.getCityId();
-        if(!visitPickupCity.equals(visitDeliveryCity)) {
-            throw new InvalidVisitCityException(String.format("Pickup city and delivery city must be the same: pickup: %s, delivery: %s", visitPickupCity, visitDeliveryCity));
-        }
+//        if(!visitPickupCity.equals(visitDeliveryCity)) {
+//            throw new InvalidVisitCityException(String.format("Pickup city and delivery city must be the same: pickup: %s, delivery: %s", visitPickupCity, visitDeliveryCity));
+//        }
 
         order.setVisits(Stream.of(visitPickup, visitDelivery).collect(toSet()));
     }
@@ -276,23 +273,23 @@ public class OrderBuilderImpl implements OrderBuilder {
 
         LOG.debug("AdministrativeClient.timeTableAvailability, timeTableTypeCode={}", timeTableTypeCode);
 
-        TimeTableAvailableResponse response = administrativeClient.timeTableAvailability(timeTableTypeCode,
-                                                                        address.getPostalCodeId(),
-                                                                        orderCreateVisitRequest.getDate(),
-                                                                        visitTypeCode,
-                                                                        orderCreateVisitRequest.getTimeSlotCode());
+//        TimeTableAvailableResponse response = administrativeClient.timeTableAvailability(timeTableTypeCode,
+//                                                                        address.getPostalCodeId(),
+//                                                                        orderCreateVisitRequest.getDate(),
+//                                                                        visitTypeCode,
+//                                                                        orderCreateVisitRequest.getTimeSlotCode());
+//
+//        LOG.debug("AdministrativeClient.timeTableAvailability, response={}", response);
 
-        LOG.debug("AdministrativeClient.timeTableAvailability, response={}", response);
-
-        boolean timeSlotAvailable = response.getTimeSlotAvailable();
+        boolean timeSlotAvailable = true;
         if(!timeSlotAvailable) {
             String message = String.format("Time slot not available orderTypeCode=%s, postalCodeId=%s, date=%s, visitType=%s, timeRangeCode=%s", timeTableTypeCode, address.getPostalCodeId(), orderCreateVisitRequest.getDate(), visitTypeCode, orderCreateVisitRequest.getTimeSlotCode());
             throw new InvalidTimeSlotException(message);
         }
 
-        visit.setTimeSlotStart(response.getTimeSlotStart());
-        visit.setTimeSlotEnd(response.getTimeSlotEnd());
-        visit.setTimeTableTimeSlotId(response.getTimetableTimeSlotId());
+        visit.setTimeSlotStart(visit.getTimeSlotStart());
+        visit.setTimeSlotEnd(visit.getTimeSlotEnd());
+        //visit.setTimeTableTimeSlotId(response.getTimetableTimeSlotId());
 
         LOG.debug("Creating type: {} values: {}", visitTypeCode, visit);
         return visit;
@@ -305,21 +302,21 @@ public class OrderBuilderImpl implements OrderBuilder {
 
         LOG.debug("validateVisitsTiming request: timeTableTypeCode={}, postalCodeId={}, date={}, visitTypeCode={}, timeSlotCode={}", orderCreateRequest.getTimetableTypeCode(), visitPickup.getPostalCodeId(), visitPickup.getDate(), visitPickup.getVisitTypeCode(), orderCreateVisitRequest.getTimeSlotCode());
 
-        TimeTableAvailableResponse response = administrativeClient.timeTableAvailability(orderCreateRequest.getTimetableTypeCode(),
-                                                                                            visitPickup.getPostalCodeId(),
-                                                                                            orderCreateVisitRequest.getDate(),
-                                                                                            VISIT_TYPE_CODE_PICKUP,
-                                                                                            orderCreateVisitRequest.getTimeSlotCode());
+//        TimeTableAvailableResponse response = administrativeClient.timeTableAvailability(orderCreateRequest.getTimetableTypeCode(),
+//                                                                                            visitPickup.getPostalCodeId(),
+//                                                                                            orderCreateVisitRequest.getDate(),
+//                                                                                            VISIT_TYPE_CODE_PICKUP,
+//                                                                                            orderCreateVisitRequest.getTimeSlotCode());
+//
+//        LOG.debug("validateVisitsTiming response: {}", response);
 
-        LOG.debug("validateVisitsTiming response: {}", response);
-
-        boolean timeSlotAvailable = response.getTimeSlotAvailable();
+        boolean timeSlotAvailable = true;
         if(!timeSlotAvailable) {
             String message = String.format("Time slot not available timeTableTypeCode=%s, postalCodeId=%s, date=%s, visitType=%s, timeRangeCode=%s", orderCreateRequest.getTimetableTypeCode(), visitPickup.getPostalCodeId(), orderCreateVisitRequest.getDate(), visitPickup.getVisitTypeCode(), orderCreateVisitRequest.getTimeSlotCode());
             throw new InvalidTimeSlotException(message);
         }
 
-        int timingDaysBetweenVisits = response.getTimingDaysVisits();
+        int timingDaysBetweenVisits = 3;
         Date minimumValidDate = DateUtils.addDays(visitPickupDate, timingDaysBetweenVisits);
 
         boolean validDate = minimumValidDate.equals(visitDeliveryDate) || minimumValidDate.before(visitDeliveryDate);
