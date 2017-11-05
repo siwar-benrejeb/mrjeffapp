@@ -15,6 +15,7 @@ import java.util.Collection;
 @RepositoryRestResource
 public interface ProductRepository extends PagingAndSortingRepository<Product, String> {
 
+    @RestResource(exported = false)
     Collection<Product> findByIdIn(@Param("ids") Collection<String> ids);
 
     Collection<Product> findByCodeInAndActiveTrue(@Param("codes") Collection<String> codes);
