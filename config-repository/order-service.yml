@@ -29,11 +29,11 @@ spring:
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: true
 
-  rabbitmq:
-      host: localhost
-      port: 5672
-      username: order-service
-      password: rabbit#order-service
+  # rabbitmq:
+      # host: localhost
+      # port: 5672
+      # username: order-service
+      # password: rabbit#order-service
       
 eureka:
     client:

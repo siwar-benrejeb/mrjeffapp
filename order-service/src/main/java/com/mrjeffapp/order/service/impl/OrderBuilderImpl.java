@@ -3,8 +3,6 @@ package com.mrjeffapp.order.service.impl;
 import com.mrjeffapp.order.api.dto.OrderCreateProductRequest;
 import com.mrjeffapp.order.api.dto.OrderCreateRequest;
 import com.mrjeffapp.order.api.dto.OrderCreateVisitRequest;
-import com.mrjeffapp.order.client.administrative.AdministrativeClient;
-import com.mrjeffapp.order.client.administrative.model.TimeTableAvailableResponse;
 import com.mrjeffapp.order.client.customer.CustomerClient;
 import com.mrjeffapp.order.client.customer.model.Address;
 import com.mrjeffapp.order.client.product.ProductClient;
@@ -51,17 +49,15 @@ public class OrderBuilderImpl implements OrderBuilder {
 
     private final CustomerClient customerClient;
 
-    private final AdministrativeClient administrativeClient;
 
     @Autowired
-    public OrderBuilderImpl(HeadquarterAssignmentConfigurationRepository headquarterAssignmentConfigurationRepository, OrderStatusRepository orderStatusRepository, ChannelRepository channelRepository, OrderTypeRepository orderTypeRepository, ProductClient productClient, CustomerClient customerClient, AdministrativeClient administrativeClient) {
+    public OrderBuilderImpl(HeadquarterAssignmentConfigurationRepository headquarterAssignmentConfigurationRepository, OrderStatusRepository orderStatusRepository, ChannelRepository channelRepository, OrderTypeRepository orderTypeRepository, ProductClient productClient, CustomerClient customerClient) {
         this.headquarterAssignmentConfigurationRepository = headquarterAssignmentConfigurationRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.channelRepository = channelRepository;
         this.orderTypeRepository = orderTypeRepository;
         this.productClient = productClient;
         this.customerClient = customerClient;
-        this.administrativeClient = administrativeClient;
     }
 
     @Override
@@ -77,9 +73,9 @@ public class OrderBuilderImpl implements OrderBuilder {
         order.setOrderDate(truncate(new Date(), Calendar.DAY_OF_MONTH));
         order.setCustomerId(orderRequest.getCustomerId());
         order.setNote(orderRequest.getNote());
-        order.setBillingAddressId(orderRequest.getBillingAddressId());
+        order.setBillingAddressId("4db865c5-1fe5-49b8-99bc-072258403f7b");
 
-        order.setPaymentMethodCode(orderRequest.getPaymentMethodCode());
+        order.setPaymentMethodCode("unknown");
 
         LOG.debug("Assigning order status");
         OrderStatus orderStatusCreated = orderStatusRepository.findByCodeAndActiveTrue(ORDER_STATUS_CREATED).get();
@@ -213,7 +209,7 @@ public class OrderBuilderImpl implements OrderBuilder {
         validateVisitTypes(orderRequest);
 
         Map<String, OrderCreateVisitRequest> visitTypeCodeAddressRequest = orderRequest.getVisits().stream()
-                                                .collect(toMap(OrderCreateVisitRequest::getVisitTypeCode, visit -> visit));
+                .collect(toMap(OrderCreateVisitRequest::getVisitTypeCode, visit -> visit));
 
         Map<String, Address> mapVisitTypeAddress = getVisitAddressMap(orderRequest);
 
@@ -232,9 +228,9 @@ public class OrderBuilderImpl implements OrderBuilder {
 
         String visitPickupCity = visitPickup.getCityId();
         String visitDeliveryCity = visitDelivery.getCityId();
-        if(!visitPickupCity.equals(visitDeliveryCity)) {
-            throw new InvalidVisitCityException(String.format("Pickup city and delivery city must be the same: pickup: %s, delivery: %s", visitPickupCity, visitDeliveryCity));
-        }
+//        if(!visitPickupCity.equals(visitDeliveryCity)) {
+//            throw new InvalidVisitCityException(String.format("Pickup city and delivery city must be the same: pickup: %s, delivery: %s", visitPickupCity, visitDeliveryCity));
+//        }
 
         order.setVisits(Stream.of(visitPickup, visitDelivery).collect(toSet()));
     }
@@ -248,8 +244,8 @@ public class OrderBuilderImpl implements OrderBuilder {
         Set<String> expectedVisitTypes = Stream.of(VISIT_TYPE_CODE_PICKUP, VISIT_TYPE_CODE_DELIVERY).collect(toSet());
 
         Set<String> visitTypes = orderRequest.getVisits().stream()
-                                                    .map(v -> v.getVisitTypeCode())
-                                                    .collect(toSet());
+                .map(v -> v.getVisitTypeCode())
+                .collect(toSet());
 
         if(!visitTypes.containsAll(expectedVisitTypes)) {
             throw new MissingVisitTypeException("VisitTypes expected=" + expectedVisitTypes + ", found=" + visitTypes);
@@ -269,30 +265,33 @@ public class OrderBuilderImpl implements OrderBuilder {
         visit.setDate(orderCreateVisitRequest.getDate());
         visit.setAddressId(address.getId());
         visit.setVisitTypeCode(visitTypeCode);
-        visit.setPostalCodeId(address.getPostalCodeId());
+        visit.setPostalCodeId("fe03b15d-4104-4a32-8ee4-c736a2dffe39");
         visit.setPostalCode(address.getPostalCode());
-        visit.setCountryId(address.getCountryId());
-        visit.setCityId(address.getCityId());
+        visit.setCountryId("090efc78-7d02-4a46-909b-f7c3fc635f24");
+        visit.setCityId("9da6520d-4579-4f55-bfbc-eeac23e1b2b2");
+        visit.setVisitTypeCode(orderCreateVisitRequest.getTimeSlotCode());
+        visit.setTimeSlotEnd(orderCreateVisitRequest.getTimeSlotEnd());
+        visit.setTimeSlotStart(orderCreateVisitRequest.getTimeSlotStart());
 
         LOG.debug("AdministrativeClient.timeTableAvailability, timeTableTypeCode={}", timeTableTypeCode);
 
-        TimeTableAvailableResponse response = administrativeClient.timeTableAvailability(timeTableTypeCode,
-                                                                        address.getPostalCodeId(),
-                                                                        orderCreateVisitRequest.getDate(),
-                                                                        visitTypeCode,
-                                                                        orderCreateVisitRequest.getTimeSlotCode());
+//        TimeTableAvailableResponse response = administrativeClient.timeTableAvailability(timeTableTypeCode,
+//                                                                        address.getPostalCodeId(),
+//                                                                        orderCreateVisitRequest.getDate(),
+//                                                                        visitTypeCode,
+//                                                                        orderCreateVisitRequest.getTimeSlotCode());
+//
+//        LOG.debug("AdministrativeClient.timeTableAvailability, response={}", response);
 
-        LOG.debug("AdministrativeClient.timeTableAvailability, response={}", response);
-
-        boolean timeSlotAvailable = response.getTimeSlotAvailable();
+        boolean timeSlotAvailable = true;
         if(!timeSlotAvailable) {
             String message = String.format("Time slot not available orderTypeCode=%s, postalCodeId=%s, date=%s, visitType=%s, timeRangeCode=%s", timeTableTypeCode, address.getPostalCodeId(), orderCreateVisitRequest.getDate(), visitTypeCode, orderCreateVisitRequest.getTimeSlotCode());
             throw new InvalidTimeSlotException(message);
         }
 
-        visit.setTimeSlotStart(response.getTimeSlotStart());
-        visit.setTimeSlotEnd(response.getTimeSlotEnd());
-        visit.setTimeTableTimeSlotId(response.getTimetableTimeSlotId());
+        visit.setTimeSlotStart(visit.getTimeSlotStart());
+        visit.setTimeSlotEnd(visit.getTimeSlotEnd());
+        //visit.setTimeTableTimeSlotId(response.getTimetableTimeSlotId());
 
         LOG.debug("Creating type: {} values: {}", visitTypeCode, visit);
         return visit;
@@ -305,21 +304,21 @@ public class OrderBuilderImpl implements OrderBuilder {
 
         LOG.debug("validateVisitsTiming request: timeTableTypeCode={}, postalCodeId={}, date={}, visitTypeCode={}, timeSlotCode={}", orderCreateRequest.getTimetableTypeCode(), visitPickup.getPostalCodeId(), visitPickup.getDate(), visitPickup.getVisitTypeCode(), orderCreateVisitRequest.getTimeSlotCode());
 
-        TimeTableAvailableResponse response = administrativeClient.timeTableAvailability(orderCreateRequest.getTimetableTypeCode(),
-                                                                                            visitPickup.getPostalCodeId(),
-                                                                                            orderCreateVisitRequest.getDate(),
-                                                                                            VISIT_TYPE_CODE_PICKUP,
-                                                                                            orderCreateVisitRequest.getTimeSlotCode());
+//        TimeTableAvailableResponse response = administrativeClient.timeTableAvailability(orderCreateRequest.getTimetableTypeCode(),
+//                                                                                            visitPickup.getPostalCodeId(),
+//                                                                                            orderCreateVisitRequest.getDate(),
+//                                                                                            VISIT_TYPE_CODE_PICKUP,
+//                                                                                            orderCreateVisitRequest.getTimeSlotCode());
+//
+//        LOG.debug("validateVisitsTiming response: {}", response);
 
-        LOG.debug("validateVisitsTiming response: {}", response);
-
-        boolean timeSlotAvailable = response.getTimeSlotAvailable();
+        boolean timeSlotAvailable = true;
         if(!timeSlotAvailable) {
             String message = String.format("Time slot not available timeTableTypeCode=%s, postalCodeId=%s, date=%s, visitType=%s, timeRangeCode=%s", orderCreateRequest.getTimetableTypeCode(), visitPickup.getPostalCodeId(), orderCreateVisitRequest.getDate(), visitPickup.getVisitTypeCode(), orderCreateVisitRequest.getTimeSlotCode());
             throw new InvalidTimeSlotException(message);
         }
 
-        int timingDaysBetweenVisits = response.getTimingDaysVisits();
+        int timingDaysBetweenVisits = 3;
         Date minimumValidDate = DateUtils.addDays(visitPickupDate, timingDaysBetweenVisits);
 
         boolean validDate = minimumValidDate.equals(visitDeliveryDate) || minimumValidDate.before(visitDeliveryDate);
@@ -332,7 +331,7 @@ public class OrderBuilderImpl implements OrderBuilder {
 
     private Map<String, Address> getVisitAddressMap(OrderCreateRequest orderRequest) {
         Map<String, String> mapVisitTypeAddressId = orderRequest.getVisits().stream()
-                                                    .collect(toMap(OrderCreateVisitRequest::getVisitTypeCode, OrderCreateVisitRequest::getAddressId));
+                .collect(toMap(OrderCreateVisitRequest::getVisitTypeCode, OrderCreateVisitRequest::getAddressId));
         LOG.debug("Visit by type and id: {}", mapVisitTypeAddressId);
 
         Set<String> addressesId = orderRequest.getVisits().stream()
@@ -350,7 +349,7 @@ public class OrderBuilderImpl implements OrderBuilder {
         checkCustomerAddressesRegistered(customerId, addressesId, addresses);
 
         Map<String, Address> mapIdAddress = addresses.getContent().stream()
-                                                        .collect(toMap(Address::getId, address -> address));
+                .collect(toMap(Address::getId, address -> address));
 
         Map<String, Address> mapVisitTypeAddress = new HashMap<>();
 
@@ -370,8 +369,8 @@ public class OrderBuilderImpl implements OrderBuilder {
 
         Collection<Address> addresses = addressesResources.getContent();
         Set<String> addressesId = addresses.stream()
-                                            .map(address -> address.getId())
-                                            .collect(toSet());
+                .map(address -> address.getId())
+                .collect(toSet());
 
         String message = "Addresses found: " + addressesId + " expected: " + expectedAddressesId;
         LOG.debug(message);

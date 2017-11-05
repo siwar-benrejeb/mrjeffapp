@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.sql.Time;
 import java.util.Date;
 
 public class OrderCreateVisitRequest {
@@ -23,6 +24,26 @@ public class OrderCreateVisitRequest {
 
     @NotNull
     private String timeSlotCode;
+    @NotNull
+    private Time timeSlotStart;
+    @NotNull
+    private Time timeSlotEnd;
+
+    public Time getTimeSlotStart() {
+        return timeSlotStart;
+    }
+
+    public void setTimeSlotStart(Time timeSlotStart) {
+        this.timeSlotStart = timeSlotStart;
+    }
+
+    public Time getTimeSlotEnd() {
+        return timeSlotEnd;
+    }
+
+    public void setTimeSlotEnd(Time timeSlotEnd) {
+        this.timeSlotEnd = timeSlotEnd;
+    }
 
     public Date getDate() {
         return date;

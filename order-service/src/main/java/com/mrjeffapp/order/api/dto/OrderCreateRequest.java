@@ -13,49 +13,62 @@ public class OrderCreateRequest {
     @NotNull
     private String customerId;
 
-    @NotNull
     private String channelCode;
 
     private String couponCode;
+    private String countryId;
+    private String postalCodeId;
 
     @NotNull
     @Valid
     private Set<OrderCreateProductRequest> products;
 
+    public String getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(String countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getPostalCodeId() {
+        return postalCodeId;
+    }
+
+    public void setPostalCodeId(String postalCodeId) {
+        this.postalCodeId = postalCodeId;
+    }
+
     @NotNull
     @Valid
     private Set<OrderCreateVisitRequest> visits;
 
-    @NotNull
     @Pattern(regexp = "B2B|B2C")
     private String orderTypeCode;
 
-    @NotNull
     @Pattern(regexp = "B2B|B2C")
     private String timetableTypeCode;
 
-    @NotNull
     private String paymentMethodCode;
 
-    @NotNull
     private String billingAddressId;
 
     private String note;
 
     public OrderCreateVisitRequest getPickupVisitRequest() {
         OrderCreateVisitRequest pickup = visits.stream()
-                                            .filter(p -> VISIT_TYPE_CODE_PICKUP.equals(p.getVisitTypeCode()))
-                                            .findFirst()
-                                            .get();
+                .filter(p -> VISIT_TYPE_CODE_PICKUP.equals(p.getVisitTypeCode()))
+                .findFirst()
+                .get();
 
         return pickup;
     }
 
     public OrderCreateVisitRequest getDeliveryVisitRequest() {
         OrderCreateVisitRequest pickup = visits.stream()
-                                            .filter(p -> VISIT_TYPE_CODE_DELIVERY.equals(p.getVisitTypeCode()))
-                                            .findFirst()
-                                            .get();
+                .filter(p -> VISIT_TYPE_CODE_DELIVERY.equals(p.getVisitTypeCode()))
+                .findFirst()
+                .get();
 
         return pickup;
     }
@@ -144,19 +157,5 @@ public class OrderCreateRequest {
         this.timetableTypeCode = timetableTypeCode;
     }
 
-    @Override
-    public String toString() {
-        return "OrderCreateRequest{" +
-                "customerId=" + customerId +
-                ", channelCode='" + channelCode + '\'' +
-                ", couponCode='" + couponCode + '\'' +
-                ", products=" + products +
-                ", visits=" + visits +
-                ", orderTypeCode='" + orderTypeCode + '\'' +
-                ", timetableTypeCode='" + timetableTypeCode + '\'' +
-                ", paymentMethodCode='" + paymentMethodCode + '\'' +
-                ", billingAddressId=" + billingAddressId +
-                ", note='" + note + '\'' +
-                '}';
-    }
+
 }
