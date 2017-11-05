@@ -16,10 +16,28 @@ public class OrderCreateRequest {
     private String channelCode;
 
     private String couponCode;
+    private String countryId;
+    private String postalCodeId;
 
     @NotNull
     @Valid
     private Set<OrderCreateProductRequest> products;
+
+    public String getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(String countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getPostalCodeId() {
+        return postalCodeId;
+    }
+
+    public void setPostalCodeId(String postalCodeId) {
+        this.postalCodeId = postalCodeId;
+    }
 
     @NotNull
     @Valid
@@ -39,18 +57,18 @@ public class OrderCreateRequest {
 
     public OrderCreateVisitRequest getPickupVisitRequest() {
         OrderCreateVisitRequest pickup = visits.stream()
-                                            .filter(p -> VISIT_TYPE_CODE_PICKUP.equals(p.getVisitTypeCode()))
-                                            .findFirst()
-                                            .get();
+                .filter(p -> VISIT_TYPE_CODE_PICKUP.equals(p.getVisitTypeCode()))
+                .findFirst()
+                .get();
 
         return pickup;
     }
 
     public OrderCreateVisitRequest getDeliveryVisitRequest() {
         OrderCreateVisitRequest pickup = visits.stream()
-                                            .filter(p -> VISIT_TYPE_CODE_DELIVERY.equals(p.getVisitTypeCode()))
-                                            .findFirst()
-                                            .get();
+                .filter(p -> VISIT_TYPE_CODE_DELIVERY.equals(p.getVisitTypeCode()))
+                .findFirst()
+                .get();
 
         return pickup;
     }
@@ -139,19 +157,5 @@ public class OrderCreateRequest {
         this.timetableTypeCode = timetableTypeCode;
     }
 
-    @Override
-    public String toString() {
-        return "OrderCreateRequest{" +
-                "customerId=" + customerId +
-                ", channelCode='" + channelCode + '\'' +
-                ", couponCode='" + couponCode + '\'' +
-                ", products=" + products +
-                ", visits=" + visits +
-                ", orderTypeCode='" + orderTypeCode + '\'' +
-                ", timetableTypeCode='" + timetableTypeCode + '\'' +
-                ", paymentMethodCode='" + paymentMethodCode + '\'' +
-                ", billingAddressId=" + billingAddressId +
-                ", note='" + note + '\'' +
-                '}';
-    }
+
 }

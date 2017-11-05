@@ -25,21 +25,17 @@ public class Visit {
 
     @NotNull
     private String visitTypeCode;
-
     @NotNull
     private Time timeSlotStart;
-
     @NotNull
     private Time timeSlotEnd;
 
     @NotNull
     private String postalCode;
 
-    @NotNull
     @Column(columnDefinition="CHAR(36)")
     private String postalCodeId;
 
-    @NotNull
     @Column(columnDefinition="CHAR(36)")
     private String cityId;
 

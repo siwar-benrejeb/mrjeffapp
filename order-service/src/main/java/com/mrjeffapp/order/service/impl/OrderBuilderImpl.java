@@ -3,7 +3,6 @@ package com.mrjeffapp.order.service.impl;
 import com.mrjeffapp.order.api.dto.OrderCreateProductRequest;
 import com.mrjeffapp.order.api.dto.OrderCreateRequest;
 import com.mrjeffapp.order.api.dto.OrderCreateVisitRequest;
-import com.mrjeffapp.order.client.administrative.model.TimeTableAvailableResponse;
 import com.mrjeffapp.order.client.customer.CustomerClient;
 import com.mrjeffapp.order.client.customer.model.Address;
 import com.mrjeffapp.order.client.product.ProductClient;
@@ -74,13 +73,13 @@ public class OrderBuilderImpl implements OrderBuilder {
         order.setOrderDate(truncate(new Date(), Calendar.DAY_OF_MONTH));
         order.setCustomerId(orderRequest.getCustomerId());
         order.setNote(orderRequest.getNote());
-        order.setBillingAddressId(orderRequest.getBillingAddressId());
+        order.setBillingAddressId("4db865c5-1fe5-49b8-99bc-072258403f7b");
 
-        order.setPaymentMethodCode(orderRequest.getPaymentMethodCode());
+        order.setPaymentMethodCode("unknown");
 
-//        LOG.debug("Assigning order status");
-//        OrderStatus orderStatusCreated = orderStatusRepository.findByCodeAndActiveTrue(ORDER_STATUS_CREATED).get();
-//        order.setOrderStatus(orderStatusCreated);
+        LOG.debug("Assigning order status");
+        OrderStatus orderStatusCreated = orderStatusRepository.findByCodeAndActiveTrue(ORDER_STATUS_CREATED).get();
+        order.setOrderStatus(orderStatusCreated);
 
         LOG.debug("Assigning visits");
         setOrderLocationAndVisits(orderRequest, order);
@@ -88,8 +87,8 @@ public class OrderBuilderImpl implements OrderBuilder {
         LOG.debug("Assigning headquarter id");
         setHeadquarterByPostalCode(orderRequest, order);
 
-//        LOG.debug("Assigning order type with value: {}", orderRequest.getOrderTypeCode());
-//        setOrderType(orderRequest, order);
+        LOG.debug("Assigning order type with value: {}", orderRequest.getOrderTypeCode());
+        setOrderType(orderRequest, order);
 
         LOG.debug("Assigning channel");
         setChannel(orderRequest, order);
@@ -154,9 +153,9 @@ public class OrderBuilderImpl implements OrderBuilder {
                                     .collect(joining(ITEM_DELIMITER));
         LOG.debug("Product codes: {}", productCodes);
 
-        Resources<Product> productResources = productClient.findProductsByIdInProducts(productCodes);
+        Resources<Product> productResources = productClient.findByCodeInAndActiveTrue(productCodes);
 
-      checkProducts(orderRequest, productResources);
+        checkProducts(orderRequest, productResources);
 
         Collection<Product> productsCodesUppercase = productResources.getContent();
         for(Product product : productsCodesUppercase) {
@@ -210,7 +209,7 @@ public class OrderBuilderImpl implements OrderBuilder {
         validateVisitTypes(orderRequest);
 
         Map<String, OrderCreateVisitRequest> visitTypeCodeAddressRequest = orderRequest.getVisits().stream()
-                                                .collect(toMap(OrderCreateVisitRequest::getVisitTypeCode, visit -> visit));
+                .collect(toMap(OrderCreateVisitRequest::getVisitTypeCode, visit -> visit));
 
         Map<String, Address> mapVisitTypeAddress = getVisitAddressMap(orderRequest);
 
@@ -245,8 +244,8 @@ public class OrderBuilderImpl implements OrderBuilder {
         Set<String> expectedVisitTypes = Stream.of(VISIT_TYPE_CODE_PICKUP, VISIT_TYPE_CODE_DELIVERY).collect(toSet());
 
         Set<String> visitTypes = orderRequest.getVisits().stream()
-                                                    .map(v -> v.getVisitTypeCode())
-                                                    .collect(toSet());
+                .map(v -> v.getVisitTypeCode())
+                .collect(toSet());
 
         if(!visitTypes.containsAll(expectedVisitTypes)) {
             throw new MissingVisitTypeException("VisitTypes expected=" + expectedVisitTypes + ", found=" + visitTypes);
@@ -266,10 +265,13 @@ public class OrderBuilderImpl implements OrderBuilder {
         visit.setDate(orderCreateVisitRequest.getDate());
         visit.setAddressId(address.getId());
         visit.setVisitTypeCode(visitTypeCode);
-        visit.setPostalCodeId(address.getPostalCodeId());
+        visit.setPostalCodeId("fe03b15d-4104-4a32-8ee4-c736a2dffe39");
         visit.setPostalCode(address.getPostalCode());
-        visit.setCountryId(address.getCountryId());
-        visit.setCityId(address.getCityId());
+        visit.setCountryId("090efc78-7d02-4a46-909b-f7c3fc635f24");
+        visit.setCityId("9da6520d-4579-4f55-bfbc-eeac23e1b2b2");
+        visit.setVisitTypeCode(orderCreateVisitRequest.getTimeSlotCode());
+        visit.setTimeSlotEnd(orderCreateVisitRequest.getTimeSlotEnd());
+        visit.setTimeSlotStart(orderCreateVisitRequest.getTimeSlotStart());
 
         LOG.debug("AdministrativeClient.timeTableAvailability, timeTableTypeCode={}", timeTableTypeCode);
 
@@ -329,7 +331,7 @@ public class OrderBuilderImpl implements OrderBuilder {
 
     private Map<String, Address> getVisitAddressMap(OrderCreateRequest orderRequest) {
         Map<String, String> mapVisitTypeAddressId = orderRequest.getVisits().stream()
-                                                    .collect(toMap(OrderCreateVisitRequest::getVisitTypeCode, OrderCreateVisitRequest::getAddressId));
+                .collect(toMap(OrderCreateVisitRequest::getVisitTypeCode, OrderCreateVisitRequest::getAddressId));
         LOG.debug("Visit by type and id: {}", mapVisitTypeAddressId);
 
         Set<String> addressesId = orderRequest.getVisits().stream()
@@ -347,7 +349,7 @@ public class OrderBuilderImpl implements OrderBuilder {
         checkCustomerAddressesRegistered(customerId, addressesId, addresses);
 
         Map<String, Address> mapIdAddress = addresses.getContent().stream()
-                                                        .collect(toMap(Address::getId, address -> address));
+                .collect(toMap(Address::getId, address -> address));
 
         Map<String, Address> mapVisitTypeAddress = new HashMap<>();
 
@@ -367,8 +369,8 @@ public class OrderBuilderImpl implements OrderBuilder {
 
         Collection<Address> addresses = addressesResources.getContent();
         Set<String> addressesId = addresses.stream()
-                                            .map(address -> address.getId())
-                                            .collect(toSet());
+                .map(address -> address.getId())
+                .collect(toSet());
 
         String message = "Addresses found: " + addressesId + " expected: " + expectedAddressesId;
         LOG.debug(message);

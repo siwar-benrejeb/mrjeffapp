@@ -44,20 +44,21 @@ public class OrderServiceImpl implements OrderService {
         LOG.debug("Creating order from request: {}", orderRequest);
 
         Order order = orderBuilder.buildOrder(orderRequest);
+        order.setPostalCodeId("fe03b15d-4104-4a32-8ee4-c736a2dffe39");
+        order.setCountryId("090efc78-7d02-4a46-909b-f7c3fc635f24");
 
         LOG.debug("Saving order to database");
         orderRepository.save(order);
 
-        LOG.debug("Tracking order status: orderId: {}", order.getId());
-        orderStatusService.trackOrderStatus(order);
+//        LOG.debug("Tracking order status: orderId: {}", order.getId());
+//        orderStatusService.trackOrderStatus(order);
 
         LOG.debug("Publishing event order created, orderId: {}", order.getId());
         eventPublisherService.sendOrderEventByOrderStatusCode(order);
-
         order.getVisits().forEach(visit -> {
             LOG.debug("Publishing event address created, visitId: {}", visit.getId());
             eventPublisherService.sendVisitCreatedEvent(visit);
-        });
+      });
 
         return order;
     }
