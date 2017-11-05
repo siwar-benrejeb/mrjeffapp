@@ -20,6 +20,7 @@ services:
     expose:
      - "8761"
 
+
   customerservice:
     build: ./customer-service
     volumes:
