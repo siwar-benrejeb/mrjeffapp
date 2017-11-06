@@ -15,7 +15,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/notification-service
+    url: jdbc:mysql://192.168.1.255:3306/notification-service
     username: "root"
     password: "mrjeff#root"
 

@@ -39,7 +39,7 @@ node {
 
         stage ('Run') {
 
-            docker.image("mrjeffapp_customerservice").run('-p 8083:8083 --net=host --expose=8080 -t mrjeffapp_customerservice:latest')
+            docker.image("mrjeffapp_customerservice").run('-p 8083:8083 --net=host --expose=8083 -t mrjeffapp_customerservice:latest')
 
         }
          stage ('Final') {
