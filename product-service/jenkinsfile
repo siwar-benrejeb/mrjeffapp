@@ -14,11 +14,7 @@ node {
    	 }
 	}
 
-   	 stage('integration test') {
-	dir ('product-service') {
-        sh 'mvn failsafe:integration-test failsafe:verify'
-   	 }
-	}
+   	
 
         stage('Build') {
 		dir ('product-service') {	
