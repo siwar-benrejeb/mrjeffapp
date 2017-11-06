@@ -15,7 +15,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.99.100:3306/order-service
+    url: jdbc:mysql://172.17.0.1:3306/order-service
     username: "root"
     password: "mrjeff#root"
 
@@ -38,7 +38,7 @@ spring:
 eureka:
     client:
         serviceUrl:
-            defaultZone: http://192.168.99.100:8761/eureka/   
+            defaultZone: http://172.17.0.1:8761/eureka/   
 
 
 ribbon:
