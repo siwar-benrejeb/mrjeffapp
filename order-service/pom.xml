@@ -21,7 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<start-class>com.mrjeffapp.order.OrderServiceApp</start-class>
-		<docker.image.prefix>${env.USERNAME}</docker.image.prefix>		<java.version>1.8</java.version>
+		<docker.image.prefix>${env.USER}</docker.image.prefix>		<java.version>1.8</java.version>
 		<logstash-logback-encoder.version>4.9</logstash-logback-encoder.version>
 	</properties>
 
@@ -98,6 +98,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

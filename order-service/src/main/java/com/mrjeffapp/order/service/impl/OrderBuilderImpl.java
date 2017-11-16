@@ -68,7 +68,8 @@ public class OrderBuilderImpl implements OrderBuilder {
         LOG.debug("Creating order with id: {}", uuid);
 
         Order order = new Order();
-        order.setId(uuid);
+
+       // order.setId(uuid);
         order.setCode(uuid);
         order.setOrderDate(truncate(new Date(), Calendar.DAY_OF_MONTH));
         order.setCustomerId(orderRequest.getCustomerId());
@@ -269,7 +270,7 @@ public class OrderBuilderImpl implements OrderBuilder {
         visit.setPostalCode(address.getPostalCode());
         visit.setCountryId("090efc78-7d02-4a46-909b-f7c3fc635f24");
         visit.setCityId("9da6520d-4579-4f55-bfbc-eeac23e1b2b2");
-        visit.setVisitTypeCode(orderCreateVisitRequest.getTimeSlotCode());
+        visit.setVisitTypeCode(orderCreateVisitRequest.getVisitTypeCode());
         visit.setTimeSlotEnd(orderCreateVisitRequest.getTimeSlotEnd());
         visit.setTimeSlotStart(orderCreateVisitRequest.getTimeSlotStart());
 

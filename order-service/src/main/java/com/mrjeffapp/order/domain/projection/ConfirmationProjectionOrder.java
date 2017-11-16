@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.config.Projection;
 
 @Projection(name = "confirmation", types = { Order.class })
 public interface ConfirmationProjectionOrder {
-
+    @Value("#{target.id}")
     String getId();
 
     @Value("#{target.orderStatus.code}")

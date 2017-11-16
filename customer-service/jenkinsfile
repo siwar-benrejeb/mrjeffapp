@@ -40,7 +40,7 @@ node {
         }
          stage ('Final') {
 
-                    build job: 'order-service-Pipeline', wait: false
+                    build job: 'product-service-Pipeline', wait: false
 
                 }
 

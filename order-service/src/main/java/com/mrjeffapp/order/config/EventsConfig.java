@@ -45,7 +45,7 @@ public class EventsConfig implements RabbitListenerConfigurer {
     @Bean
     public ConnectionFactory rabbitConnectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("192.168.99.100");
+        connectionFactory.setHost("172.17.0.1");
         connectionFactory.setPort(5672);
         connectionFactory.setUsername("order-service");
         connectionFactory.setPassword("rabbit#order-service");
