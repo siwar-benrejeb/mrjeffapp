@@ -17,7 +17,7 @@ node {
    	
 
         stage('Build') {
-		dir ('config-service') {	
+		dir ('customer-service') {	
 			
             	sh 'mvn clean package'
 		}
