@@ -22,8 +22,7 @@ node {
    	 }
 
         stage('Build') {
-		dir ('notification-service') {	
-			
+		dir ('notification-service') {		
             	sh 'mvn clean package'
 		}
         }
