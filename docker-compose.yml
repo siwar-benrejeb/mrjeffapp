@@ -11,6 +11,7 @@ services:
     expose:
      - "8888"
 
+
   eurekaservice:
     build: ./eureka-service
     volumes:
