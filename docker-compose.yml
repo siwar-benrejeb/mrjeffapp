@@ -12,6 +12,7 @@ services:
      - "8888"
 
 
+
   eurekaservice:
     build: ./eureka-service
     volumes:
